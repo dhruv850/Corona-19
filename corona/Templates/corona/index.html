@@ -1,0 +1,119 @@
+{% extends 'corona/base.html' %}
+
+<!DOCTYPE html>
+
+{% block body %}
+{% load humanize %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+<body>
+<div class="row">
+    <div class="col-2">
+        <div class="card card-chart">
+            <div class="card-header ">
+                <h2 class="card-title"><b>Total Cases</b></h2>
+                <h3 class="card-title "> <span class="total_confirmed_cases">{{total_confirmed.total_cases|intcomma }}</span></h3>
+            </div>
+        </div>
+        <div class="card card-chart">
+            <div class="card-header ">
+                <h4 class="card-title">Global Effect</h4>
+            </div>
+            <div class="card-body ">
+                <div class="table-responsive" style="height:500px">
+                    <table class="table tablesorter table-responsive" id="tblCountry">
+                        <tbody>
+                        {% for location in maps_data %}
+                        <tr>
+                            <td data-country="{{ location.country}}" class="country_wise_case">
+                                <a href="#">{{ location.country}}-{{ location.total_cases|intcomma }}</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-chart">
+            <div class="card-header ">
+                <div class="row">
+                    <div class="col-sm-6 text-left">
+                        <h2 class="card-title"><b>World Wide Cases</b></h2>
+                    </div>
+                    <!-- <div class="col-sm-6">
+                      <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                        <label class="btn btn-sm btn-primary btn-simple active" id="0">
+                          <input type="radio" name="options" autocomplete="off" checked> Accounts
+                        </label>
+                        <label class="btn btn-sm btn-primary btn-simple " id="1">
+                          <input type="radio" name="options" autocomplete="off"> Purchases
+                        </label>
+                      </div>
+                    </div> -->
+                </div>
+            </div>
+            <div id="myDiv" class="chart-area card-body" style="width:100%;align=center">
+                     {% autoescape on %}
+                    {{ country_wise_cases|safe }}
+                    {% endautoescape %}
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="row">
+            <div class="col-6">
+                <div class="card card-chart">
+                    <div class="card-header ">
+                        <h2 class="card-title"><b>Total Deaths</b></h2>
+                        <h3 class="card-title"><span class="total_death_cases">{{total_deaths.total_cases|intcomma }}</span></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-chart">
+                    <div class="card-header ">
+                        <h2 class="card-title"><b>Total Recovery</b></h2>
+                        <h3 class="card-title"><span class="total_recovered_cases">{{total_recovered.total_cases|intcomma }}</span> </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card ">
+            <div class="card-header">
+                <h4 class="card-title"> Monthly Cases</h4>
+            </div>
+            <div class="card-body">
+                {% autoescape on %}
+                {{ month_wise_data|safe }}
+                {% endautoescape %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-chart">
+            <div class="card-header ">
+                        <h4 class="card-title">Daily Cases</h4>
+            </div>
+            <div id="time_series_data" class="chart-area card-body" style="width:100%;align=center">
+                     {% autoescape on %}
+                    {{ time_series_data|safe }}
+                    {% endautoescape %}
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="csrf_token" value='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+<div class="modal"><!-- Place at bottom of page --></div>
+</body>
+</html>
+{% endblock %}
